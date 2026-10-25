@@ -1,5 +1,3 @@
-import { site } from 'content/site'
-
 export type ContactPayload = {
   name: string
   email: string
@@ -37,9 +35,7 @@ export async function submitContact(
 
   if (!response.ok) {
     if (response.status === 404 || response.status === 405) {
-      throw new Error(
-        `Dit formulier is op deze omgeving niet beschikbaar. Mail naar ${site.email}.`
-      )
+      throw new Error('Dit formulier is op deze omgeving niet beschikbaar.')
     }
     const data = (await response.json().catch(() => null)) as {
       message?: string

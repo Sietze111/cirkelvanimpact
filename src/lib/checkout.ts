@@ -1,5 +1,4 @@
 import { commerce, isOrderable, totalCents } from 'shared/commerce'
-import { site } from 'content/site'
 import {
   buildOrderReference,
   hasErrors,
@@ -11,6 +10,9 @@ import {
 } from 'shared/order'
 
 const LAST_ORDER_KEY = 'cvi:last-order'
+
+export const CHECKOUT_UNAVAILABLE_MESSAGE =
+  'Betalen is op deze omgeving niet beschikbaar.'
 
 export class CheckoutValidationError extends Error {
   errors: FieldErrors
@@ -63,9 +65,7 @@ export async function startCheckout(
 
   if (!response.ok) {
     if (response.status === 404 || response.status === 405) {
-      throw new Error(
-        `Betalen is op deze omgeving niet beschikbaar. Mail naar ${site.email} om te bestellen.`
-      )
+      throw new Error(CHECKOUT_UNAVAILABLE_MESSAGE)
     }
     const data = (await response.json().catch(() => null)) as {
       message?: string

@@ -17,12 +17,14 @@ import {
   type FieldErrors
 } from 'shared/order'
 import {
+  CHECKOUT_UNAVAILABLE_MESSAGE,
   CheckoutValidationError,
   isDemoCheckout,
   startCheckout
 } from 'lib/checkout'
 import { track } from 'lib/analytics'
 import { asset } from 'lib/asset'
+import { site } from 'content/site'
 import { product } from 'content/product'
 import Button from 'components/ui/Button'
 import Field, { inputClass } from './Field'
@@ -165,12 +167,15 @@ export default function CheckoutForm({
               De betaling kon niet worden gestart.
             </p>
             <p className="mt-1">
-              {submitError} Probeer het opnieuw of mail naar{' '}
+              {submitError}
+              {submitError !== CHECKOUT_UNAVAILABLE_MESSAGE &&
+                ' Probeer het opnieuw.'}{' '}
+              Mail naar{' '}
               <a
-                href="mailto:info@cirkelvanimpact.nl"
+                href={`mailto:${site.email}`}
                 className="font-medium underline underline-offset-2"
               >
-                info@cirkelvanimpact.nl
+                {site.email}
               </a>
               .
             </p>
