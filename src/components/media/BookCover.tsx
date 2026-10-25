@@ -1,4 +1,5 @@
 import { product } from 'content/product'
+import { asset } from 'lib/asset'
 import { classNames } from 'utils'
 
 type BookCoverProps = {
@@ -12,7 +13,7 @@ export default function BookCover({
 }: BookCoverProps) {
   return (
     <img
-      src={product.cover}
+      src={asset(product.cover)}
       alt={product.coverAlt}
       width={800}
       height={1120}

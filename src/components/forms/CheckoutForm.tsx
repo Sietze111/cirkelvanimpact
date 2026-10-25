@@ -22,6 +22,7 @@ import {
   startCheckout
 } from 'lib/checkout'
 import { track } from 'lib/analytics'
+import { asset } from 'lib/asset'
 import { product } from 'content/product'
 import Button from 'components/ui/Button'
 import Field, { inputClass } from './Field'
@@ -493,7 +494,7 @@ export default function CheckoutForm({
         >
           <div className="flex gap-4">
             <img
-              src={product.cover}
+              src={asset(product.cover)}
               alt={product.coverAlt}
               width={800}
               height={1120}

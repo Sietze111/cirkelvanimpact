@@ -64,6 +64,21 @@ De site is voorbereid op Netlify:
 - functions: `server`
 - SPA-fallback en `/api/*`-routing staan in `netlify.toml`
 
+### GitHub Pages (preview)
+
+Er staat een workflow in `.github/workflows/deploy-pages.yml` die bij elke push
+naar `main` bouwt en naar GitHub Pages publiceert. Zet in GitHub onder
+**Settings → Pages → Build and deployment** de bron op **GitHub Actions**.
+
+- De workflow zet `VITE_BASE_PATH` automatisch op `/<repository>/`, zodat
+  assets en routerlinks onder het subpad werken.
+- `scripts/postbuild.mjs` maakt `404.html`, zodat diepe links zoals
+  `/cirkelvanimpact/het-boek` werken.
+- GitHub Pages kan geen Netlify Functions draaien. Bestellen en het
+  contactformulier tonen daar een duidelijke melding in plaats van een
+  betaalflow. Gebruik Netlify (of een andere host met functies) voor de echte
+  site.
+
 Zie [docs/HANDOVER.md](docs/HANDOVER.md) voor de volledige livegang.
 
 ## Status

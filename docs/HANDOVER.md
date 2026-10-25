@@ -92,6 +92,23 @@ pnpm dev
 
 Zet nooit servergeheimen in een `VITE_`-variabele: die komen in de browser.
 
+## GitHub Pages (preview)
+
+De workflow `.github/workflows/deploy-pages.yml` bouwt en publiceert bij elke
+push naar `main`. Zet in GitHub **Settings → Pages → Build and deployment** op
+**GitHub Actions**.
+
+- `VITE_BASE_PATH` wordt automatisch `/<repository>/`; lokaal en op Netlify
+  blijft het `/`.
+- `postbuild` maakt `dist/404.html` en `dist/.nojekyll`, zodat diepe links en
+  mappen met een underscore werken.
+- GitHub Pages heeft geen serverfuncties. `/api/checkout` en `/api/contact`
+  geven daar 404; de site toont dan een melding met het e-mailadres. Gebruik
+  Pages dus als preview en Netlify voor de echte winkel.
+- Een project-site staat onder `https://<gebruiker>.github.io/<repository>/`.
+  `robots.txt` en `sitemap.xml` staan dan niet op het domeinroot; voor productie
+  is een eigen domein nodig.
+
 ## Mollie
 
 1. Maak een Mollie-account en vraag iDEAL aan.
@@ -153,6 +170,8 @@ worden er geen orderbevestigingen verstuurd.
 - [ ] Privacy, voorwaarden en levering zijn gecontroleerd.
 - [ ] KvK en btw-id zijn ingevuld of bewust weggelaten.
 - [ ] Analytics ontvangt een pageview bij de eerste lading én bij elke routewijziging.
+- [ ] GitHub Pages-preview: favicon, afbeeldingen en een diepe link zoals
+      `/cirkelvanimpact/het-boek` werken.
 - [ ] Lighthouse: accessibility, best practices en SEO controleren.
 
 ## Bekende beperkingen
@@ -171,6 +190,9 @@ worden er geen orderbevestigingen verstuurd.
 - **Geen reviews.** Bewust, tot er echte quotes met toestemming zijn.
 - **Afbeeldingen zijn placeholders.**
 - **Geen factuurgeneratie.** Zakelijke bestellingen lopen via contact.
+- **GitHub Pages is alleen een preview.** Betalen en het contactformulier
+  hebben de Netlify Functions nodig; op Pages verschijnt een melding met het
+  e-mailadres.
 
 ## Rollback
 

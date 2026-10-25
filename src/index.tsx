@@ -7,12 +7,18 @@ import './styles/index.css'
 
 initAnalytics()
 
+// Vite ends BASE_URL with a slash (`/cirkelvanimpact/`); React Router expects
+// the basename without one. On the root domain BASE_URL is `/`.
+const baseUrl = import.meta.env.BASE_URL
+const basename = baseUrl === '/' ? undefined : baseUrl.replace(/\/$/, '')
+
 const container = document.getElementById('root') as HTMLDivElement
 const root = createRoot(container)
 
 root.render(
   <StrictMode>
     <BrowserRouter
+      basename={basename}
       future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
     >
       <App />

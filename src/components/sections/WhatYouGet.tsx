@@ -1,6 +1,7 @@
 import { home } from 'content/home'
 import { product } from 'content/product'
 import { track } from 'lib/analytics'
+import { asset } from 'lib/asset'
 import { Link } from 'react-router-dom'
 import Button from 'components/ui/Button'
 import CheckList from 'components/ui/CheckList'
@@ -62,7 +63,7 @@ export default function WhatYouGet() {
               className="absolute -inset-3 -rotate-2 rounded-[2.5rem] bg-sand-200/70"
             />
             <Figure
-              src={product.detailImage}
+              src={asset(product.detailImage)}
               alt={product.detailAlt}
               ratio="3 / 2"
               className="relative rounded-4xl border-4 border-cream-50 shadow-soft"

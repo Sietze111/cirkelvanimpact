@@ -1,5 +1,6 @@
 import { about } from 'content/about'
 import { home } from 'content/home'
+import { asset } from 'lib/asset'
 import Button from 'components/ui/Button'
 import Container from 'components/ui/Container'
 import Eyebrow from 'components/ui/Eyebrow'
@@ -16,7 +17,7 @@ export default function AboutIepe() {
               className="absolute -inset-3 rotate-3 rounded-[2.5rem] bg-cream-200"
             />
             <img
-              src={about.image}
+              src={asset(about.image)}
               alt={about.imageAlt}
               width={800}
               height={1000}

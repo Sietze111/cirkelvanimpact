@@ -2,6 +2,7 @@ import { home } from 'content/home'
 import { about } from 'content/about'
 import { commerce, deliveryMessage, formatPrice } from 'shared/commerce'
 import { track } from 'lib/analytics'
+import { asset } from 'lib/asset'
 import BookCover from 'components/media/BookCover'
 import Button from 'components/ui/Button'
 import CircleMotif from 'components/ui/CircleMotif'
@@ -69,7 +70,7 @@ export default function Hero() {
           <BookCover priority className="relative" />
           <div className="absolute -bottom-2 -left-4 w-32 overflow-hidden rounded-2xl border-4 border-cream-50 shadow-soft sm:-left-8 sm:w-40">
             <img
-              src={about.image}
+              src={asset(about.image)}
               alt={about.imageAlt}
               width={800}
               height={1000}

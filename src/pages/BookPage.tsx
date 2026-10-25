@@ -2,6 +2,7 @@ import { product } from 'content/product'
 import { seo } from 'content/seo'
 import { commerce, deliveryMessage, formatPrice } from 'shared/commerce'
 import { track } from 'lib/analytics'
+import { asset } from 'lib/asset'
 import { bookSchema } from 'lib/schema'
 import Seo from 'components/seo/Seo'
 import JsonLd from 'components/seo/JsonLd'
@@ -177,7 +178,7 @@ export default function BookPage() {
                 className="absolute -inset-3 rotate-2 rounded-[2.5rem] bg-sand-200/70"
               />
               <Figure
-                src={product.detailImage}
+                src={asset(product.detailImage)}
                 alt={product.detailAlt}
                 ratio="3 / 2"
                 className="relative rounded-4xl border-4 border-white shadow-soft"

@@ -1,6 +1,7 @@
 import { about } from 'content/about'
 import { seo } from 'content/seo'
 import { personSchema } from 'lib/schema'
+import { asset } from 'lib/asset'
 import Seo from 'components/seo/Seo'
 import JsonLd from 'components/seo/JsonLd'
 import Button from 'components/ui/Button'
@@ -32,7 +33,7 @@ export default function AboutPage() {
                 className="absolute -inset-3 rotate-3 rounded-[2.5rem] bg-cream-200"
               />
               <img
-                src={about.image}
+                src={asset(about.image)}
                 alt={about.imageAlt}
                 width={800}
                 height={1000}
