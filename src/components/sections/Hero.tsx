@@ -3,7 +3,7 @@ import { about } from 'content/about'
 import { commerce, deliveryMessage, formatPrice } from 'shared/commerce'
 import { track } from 'lib/analytics'
 import { asset } from 'lib/asset'
-import BookCover from 'components/media/BookCover'
+import Book3D from 'components/media/Book3D'
 import Button from 'components/ui/Button'
 import CircleMotif from 'components/ui/CircleMotif'
 import Container from 'components/ui/Container'
@@ -67,7 +67,7 @@ export default function Hero() {
             aria-hidden="true"
             className="absolute -inset-4 rotate-3 rounded-5xl bg-coral-100/80 sm:-inset-6"
           />
-          <BookCover priority className="relative" />
+          <Book3D priority className="relative" />
           <div className="absolute -bottom-2 -left-4 w-32 overflow-hidden rounded-2xl border-4 border-cream-50 shadow-soft sm:-left-8 sm:w-40">
             <img
               src={asset(about.image)}

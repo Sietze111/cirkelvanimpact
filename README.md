@@ -84,6 +84,9 @@ Zie [docs/HANDOVER.md](docs/HANDOVER.md) voor de volledige livegang.
 ## Status
 
 - Zeven hoofdpagina's, bestelflow, bedanktpagina, juridische pagina's en 404.
+- De boekomslag is een 3D-scene (react-three-fiber) die pas laadt als hij in
+  beeld komt, met de platte omslag als fallback. Zie
+  [docs/HANDOVER.md](docs/HANDOVER.md#3d-boekomslag).
 - Demo-checkout in development; Mollie iDEAL in productie.
 - Contactformulier met honeypot, tijdscontrole en optionele Turnstile.
 - Geen reviews geplaatst zolang er geen toestemming en echte quotes zijn.

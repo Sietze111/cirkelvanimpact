@@ -18,6 +18,8 @@ accounts, echte beelden en een paar expliciete beslissingen.
 - Juridische pagina's: privacy, voorwaarden, levering en retour, cookies.
 - 404-pagina, sitemap, robots.txt, canonical URLs, Open Graph en JSON-LD.
 - Plausible Analytics, cookieloos en alleen actief als een domein is ingesteld.
+- 3D-boekomslag in de hero en op de boekpagina, met de platte omslag als
+  fallback. Zie [ASSETS.md](ASSETS.md#3d-boekomslag).
 - Netlify Functions voor checkout, orderstatus, Mollie-webhook en contact.
 - Contentcheck en unittests voor prijs, btw, validatie en ordergegevens.
 
@@ -170,6 +172,8 @@ worden er geen orderbevestigingen verstuurd.
 - [ ] Privacy, voorwaarden en levering zijn gecontroleerd.
 - [ ] KvK en btw-id zijn ingevuld of bewust weggelaten.
 - [ ] Analytics ontvangt een pageview bij de eerste lading én bij elke routewijziging.
+- [ ] 3D-boek: sleept op desktop, scrollt verticaal op mobiel, staat stil bij
+      `prefers-reduced-motion` en valt terug op de platte omslag zonder WebGL.
 - [ ] GitHub Pages-preview: favicon, afbeeldingen en een diepe link zoals
       `/cirkelvanimpact/het-boek` werken.
 - [ ] Lighthouse: accessibility, best practices en SEO controleren.
@@ -189,6 +193,10 @@ worden er geen orderbevestigingen verstuurd.
 - **Geen CMS.** Iepe kan teksten niet zelf aanpassen.
 - **Geen reviews.** Bewust, tot er echte quotes met toestemming zijn.
 - **Afbeeldingen zijn placeholders.**
+- **3D-boek is decoratief.** Zonder WebGL, bij `saveData`, op 2G of bij een
+  fout blijft de platte omslag staan. De scene kost circa 236 kB gzip en laadt
+  pas als het boek in beeld komt. Controleer na een three-update of de scene op
+  iOS en in Safari nog rendert.
 - **Geen factuurgeneratie.** Zakelijke bestellingen lopen via contact.
 - **GitHub Pages is alleen een preview.** Betalen en het contactformulier
   hebben de Netlify Functions nodig; op Pages verschijnt een melding met het

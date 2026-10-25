@@ -17,6 +17,21 @@ echte JPEG en het iOS-icoon een echte PNG.
 | `favicon.svg` | Browsericoon | SVG met vierkante viewBox |
 | `apple-touch-icon.png` | iOS-startscherm | 180 × 180 px, PNG |
 
+## 3D-boekomslag
+
+De hero en de boekpagina tonen het boek als 3D-scene in plaats van een platte
+afbeelding. De scene staat in `src/components/media/BookScene.tsx` en wordt pas
+geladen als het boek in beeld komt.
+
+- De omslag is dezelfde `product.cover` uit `src/content/product.ts`. Een nieuwe
+  omslag (5:7) werkt dus automatisch in de 3D-scene.
+- Tot de eerste frame is getekend blijft de platte omslag zichtbaar. Dat is ook
+  de fallback bij een fout, ontbrekende WebGL, `saveData` of een 2G-verbinding.
+- Bij `prefers-reduced-motion` staat het boek stil en is slepen uitgeschakeld.
+  Op aanraakschermen blijft verticaal scrollen werken.
+- De scene is een apart chunk van ongeveer 236 kB gzip en wordt niet bij de
+  eerste pagina-load meegestuurd.
+
 ## Vervangen
 
 1. Zet het echte beeld in `public/images/` met een duidelijke bestandsnaam.

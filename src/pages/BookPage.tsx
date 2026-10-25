@@ -6,7 +6,7 @@ import { asset } from 'lib/asset'
 import { bookSchema } from 'lib/schema'
 import Seo from 'components/seo/Seo'
 import JsonLd from 'components/seo/JsonLd'
-import BookCover from 'components/media/BookCover'
+import Book3D from 'components/media/Book3D'
 import Button from 'components/ui/Button'
 import CheckList from 'components/ui/CheckList'
 import Container from 'components/ui/Container'
@@ -46,7 +46,7 @@ export default function BookPage() {
         <Container>
           <div className="grid items-start gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
             <div className="mx-auto w-full max-w-[21rem] lg:sticky lg:top-28">
-              <BookCover priority />
+              <Book3D priority />
               <div className="mt-6 rounded-2xl border border-ink-900/10 bg-cream-50 p-5">
                 <p className="font-display text-3xl text-ink-900">
                   {formatPrice(commerce.priceCents)}
