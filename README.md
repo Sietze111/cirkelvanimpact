@@ -37,7 +37,7 @@ src/components/     UI, layout, formulieren, media en secties
 src/lib/            Checkout, contact, analytics en structured data
 server/             Netlify Functions: checkout, contact, status en webhook
 public/             Placeholders, favicon, robots.txt en sitemap.xml
-docs/               Buildplan, contentgids, assets en overdracht
+docs/               Buildplan, contentgids, assets, overdracht en livegangplan
 ```
 
 ## Content aanpassen
@@ -79,7 +79,10 @@ naar `main` bouwt en naar GitHub Pages publiceert. Zet in GitHub onder
   betaalflow. Gebruik Netlify (of een andere host met functies) voor de echte
   site.
 
-Zie [docs/HANDOVER.md](docs/HANDOVER.md) voor de volledige livegang.
+Zie [docs/HANDOVER.md](docs/HANDOVER.md) voor de technische naslag en
+[docs/LAUNCHPLAN.md](docs/LAUNCHPLAN.md) voor het stappenplan naar livegang:
+domein, hosting, DNS, mail, Mollie, Resend, orderopslag, content, juridisch en
+de go-live-runbook.
 
 ## Status
 

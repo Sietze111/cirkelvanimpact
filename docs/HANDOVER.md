@@ -5,6 +5,11 @@
 De site is volledig gebouwd en lokaal getest. Livegang vraagt nog om externe
 accounts, echte beelden en een paar expliciete beslissingen.
 
+Het volledige, gefaseerde stappenplan staat in
+[LAUNCHPLAN.md](LAUNCHPLAN.md): besluiten, domein kopen, Netlify, DNS, mail,
+Mollie, Resend, orderopslag, content, juridisch, SEO, CI en de go-live-runbook.
+Dit document blijft de technische naslag.
+
 ### Wat er staat
 
 - Zeven hoofdpagina's: home, het boek, de methode, reviews, over Iepe,
