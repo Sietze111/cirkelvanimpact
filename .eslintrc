@@ -32,10 +32,12 @@
     "react-hooks/exhaustive-deps": "warn",
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
+    "react/no-unescaped-entities": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
-    "tailwindcss/classnames-order": "warn",
-    "tailwindcss/no-custom-classname": "warn",
+    "@typescript-eslint/no-explicit-any": "off",
+    "tailwindcss/classnames-order": "off",
+    "tailwindcss/no-custom-classname": "off",
     "tailwindcss/no-contradicting-classname": "error"
   }
 }

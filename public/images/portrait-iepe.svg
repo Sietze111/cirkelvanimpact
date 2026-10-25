@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Plaatsvervangend portret van Iepe Soet</title>
+  <desc id="desc">Abstract portret in warme tinten. Hier komt later een echte foto van Iepe Soet.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F0E6D6" />
+      <stop offset="1" stop-color="#E6D8C3" />
+    </linearGradient>
+    <linearGradient id="figure" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#27312C" />
+      <stop offset="1" stop-color="#0F3B3B" />
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="1000" fill="url(#bg)" />
+  <circle cx="400" cy="430" r="270" fill="#FDFBF7" opacity="0.45" />
+  <circle cx="400" cy="430" r="210" fill="none" stroke="#E4572E" stroke-width="1.5" opacity="0.5" />
+  <circle cx="610" cy="214" r="46" fill="#E4572E" opacity="0.18" />
+  <circle cx="150" cy="760" r="72" fill="#17504F" opacity="0.12" />
+
+  <g>
+    <path d="M400 232c-86 0-150 70-150 160 0 58 26 108 68 136-104 30-180 118-196 238-4 28 17 54 46 54h464c29 0 50-26 46-54-16-120-92-208-196-238 42-28 68-78 68-136 0-90-64-160-150-160z" fill="url(#figure)" />
+    <path d="M400 250c-64 0-116 46-126 108 16-12 38-20 62-20 38 0 72 18 94 46 10-12 26-20 44-20 14 0 27 5 37 14-8-74-55-128-111-128z" fill="#3A443F" opacity="0.55" />
+  </g>
+
+  <rect x="0" y="0" width="800" height="1000" fill="none" stroke="#FDFBF7" stroke-width="18" />
+  <g font-family="Inter, Helvetica, Arial, sans-serif">
+    <rect x="48" y="876" width="704" height="76" rx="14" fill="#FDFBF7" opacity="0.94" />
+    <text x="80" y="906" font-size="12" font-weight="600" letter-spacing="2" fill="#C94524">FOTO VOLGT</text>
+    <text x="80" y="934" font-size="20" fill="#1C2421">Portret van Iepe Soet</text>
+  </g>
+</svg>

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Werktafel met het boek, papier en aantekeningen</title>
+  <desc id="desc">Plaatsvervangende illustratie van een werktafel met het boek De Cirkel van Impact, notitiepapier en een potlood.</desc>
+  <defs>
+    <linearGradient id="desk" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E6D8C3" />
+      <stop offset="1" stop-color="#DCC9AE" />
+    </linearGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F8F2E8" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#1C2421" flood-opacity="0.18" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#desk)" />
+  <rect width="1200" height="800" fill="#FDFBF7" opacity="0.16" />
+
+  <g filter="url(#shadow)" transform="rotate(-3 400 430)">
+    <rect x="180" y="250" width="440" height="600" rx="10" fill="#FDFBF7" />
+    <rect x="180" y="250" width="440" height="600" rx="10" fill="none" stroke="#1C2421" stroke-opacity="0.1" />
+    <rect x="212" y="286" width="58" height="4" fill="#E4572E" />
+    <text x="212" y="326" font-family="Inter, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" letter-spacing="3" fill="#C94524">IEPE SOET</text>
+    <text x="212" y="398" font-family="Georgia, 'Times New Roman', serif" font-size="44" font-weight="700" fill="#1C2421">DE CIRKEL</text>
+    <text x="212" y="444" font-family="Georgia, 'Times New Roman', serif" font-size="44" font-weight="700" fill="#17504F">VAN IMPACT</text>
+    <text x="212" y="492" font-family="Inter, Helvetica, Arial, sans-serif" font-size="15" fill="#3A443F">Waarom harder rennen zelden helpt,</text>
+    <text x="212" y="514" font-family="Inter, Helvetica, Arial, sans-serif" font-size="15" fill="#3A443F">en beter verbinden en sturen meestal wel.</text>
+    <circle cx="400" cy="640" r="92" fill="none" stroke="#E4572E" stroke-width="1.5" opacity="0.6" />
+    <circle cx="400" cy="640" r="62" fill="#0F3B3B" />
+    <circle cx="400" cy="640" r="8" fill="#E4572E" />
+    <text x="212" y="790" font-family="Inter, Helvetica, Arial, sans-serif" font-size="12" letter-spacing="2" fill="#66706A">EEN PRAKTISCH MANAGEMENTBOEK</text>
+  </g>
+
+  <g filter="url(#shadow)" transform="rotate(4 800 500)">
+    <rect x="650" y="210" width="380" height="470" rx="8" fill="url(#paper)" />
+    <rect x="690" y="258" width="150" height="10" rx="5" fill="#1C2421" opacity="0.75" />
+    <rect x="690" y="292" width="290" height="6" rx="3" fill="#66706A" opacity="0.35" />
+    <rect x="690" y="312" width="270" height="6" rx="3" fill="#66706A" opacity="0.35" />
+    <rect x="690" y="332" width="300" height="6" rx="3" fill="#66706A" opacity="0.35" />
+    <rect x="690" y="376" width="120" height="6" rx="3" fill="#E4572E" opacity="0.7" />
+    <circle cx="706" cy="420" r="12" fill="none" stroke="#E4572E" stroke-width="2" />
+    <rect x="692" y="456" width="280" height="6" rx="3" fill="#66706A" opacity="0.3" />
+    <rect x="692" y="476" width="240" height="6" rx="3" fill="#66706A" opacity="0.3" />
+    <circle cx="920" cy="570" r="62" fill="none" stroke="#17504F" stroke-width="1.5" opacity="0.4" />
+    <path d="M868 610c34-26 70-26 104 0" fill="none" stroke="#17504F" stroke-width="2" opacity="0.45" />
+  </g>
+
+  <g transform="rotate(-24 960 700)">
+    <rect x="900" y="640" width="260" height="18" rx="9" fill="#E4572E" />
+    <path d="M1120 640l52 9-52 9z" fill="#F0E6D6" />
+    <path d="M1172 649l14-4-8 8-8 4z" fill="#1C2421" />
+  </g>
+
+  <g>
+    <ellipse cx="960" cy="750" rx="78" ry="16" fill="#1C2421" opacity="0.08" />
+    <path d="M892 640h136v54c0 30-24 54-54 54h-28c-30 0-54-24-54-54z" fill="#FDFBF7" />
+    <path d="M1028 660h18c22 0 38 16 38 38s-16 38-38 38h-18" fill="none" stroke="#FDFBF7" stroke-width="12" />
+    <path d="M912 668h88" stroke="#DCC9AE" stroke-width="4" stroke-linecap="round" />
+  </g>
+
+  <text x="72" y="736" font-family="Inter, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="2" fill="#66706A">SFEERBEELD · PLAATSHOUDER</text>
+</svg>

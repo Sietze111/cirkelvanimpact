@@ -1,80 +1,75 @@
-![reactjs-vite-tailwindcss-boilerplate](https://user-images.githubusercontent.com/16243531/217138979-b854309c-4742-4275-a705-f9fec5158217.jpg)
+# De Cirkel van Impact — website
 
-# React Tailwindcss Boilerplate build with Vite
+Verkoopsite voor *De Cirkel van Impact* van Iepe Soet. Gebouwd met Vite, React,
+TypeScript en Tailwind CSS. Alle teksten staan in typologische contentbestanden
+in de repository; er is bewust **geen CMS**.
 
-This is a boilerplate build with Vite, React 18, TypeScript, Vitest, Testing Library, TailwindCSS 3, Eslint and Prettier.
-
-## What is inside?
-
-This project uses many tools like:
-
-- [Vite](https://vitejs.dev)
-- [ReactJS](https://reactjs.org)
-- [TypeScript](https://www.typescriptlang.org)
-- [Vitest](https://vitest.dev)
-- [Testing Library](https://testing-library.com)
-- [Tailwindcss](https://tailwindcss.com)
-- [Eslint](https://eslint.org)
-- [Prettier](https://prettier.io)
-
-## Getting Started
-
-### Install
-
-Create the project.
-
-```bash
-pnpm dlx degit joaopaulomoraes/reactjs-vite-tailwindcss-boilerplate my-app
-```
-
-Access the project directory.
-
-```bash
-cd my-app
-```
-
-Install dependencies.
+## Snel starten
 
 ```bash
 pnpm install
+pnpm dev
 ```
 
-Serve with hot reload at <http://localhost:5173>.
+De site draait op <http://localhost:5173>. In development gebruikt de
+bestelpagina automatisch de demo-flow: er wordt niets betaald of verzonden.
 
-```bash
-pnpm run dev
+## Scripts
+
+| Script | Wat het doet |
+| --- | --- |
+| `pnpm dev` | Lokale ontwikkelserver |
+| `pnpm build` | Typecheck en productiebuild naar `dist/` |
+| `pnpm serve` | Productiebuild lokaal bekijken |
+| `pnpm typecheck` | TypeScript controleren |
+| `pnpm lint` | ESLint met maximaal nul waarschuwingen |
+| `pnpm test` | Vitest in watchmodus |
+| `pnpm exec vitest run` | Tests eenmalig uitvoeren |
+| `pnpm content:check` | Interne links, prijzen en verboden termen controleren |
+
+## Structuur
+
+```
+src/content/        Alle teksten, navigatie, juridische teksten en SEO
+src/shared/         Prijs, btw, voorraad, validatie en orderlogica
+src/pages/          Pagina's en routes
+src/components/     UI, layout, formulieren, media en secties
+src/lib/            Checkout, contact, analytics en structured data
+server/             Netlify Functions: checkout, contact, status en webhook
+public/             Placeholders, favicon, robots.txt en sitemap.xml
+docs/               Buildplan, contentgids, assets en overdracht
 ```
 
-### Lint
+## Content aanpassen
 
-```bash
-pnpm run lint
-```
+Er is geen beheeromgeving. Teksten worden in code aangepast, gecommit en
+gedeployed. Zie [docs/CONTENT-GUIDE.md](docs/CONTENT-GUIDE.md) voor de
+belangrijkste bestanden en spelregels.
 
-### Typecheck
+## Omgevingsvariabelen
 
-```bash
-pnpm run typecheck
-```
+Kopieer `.env.example` naar `.env` voor lokaal gebruik. Alleen variabelen die
+met `VITE_` beginnen komen in de browser. De overige variabelen horen in Netlify
+en zijn alleen beschikbaar voor de serverfuncties.
 
-### Build
+Zonder `MOLLIE_API_KEY` en `RESEND_API_KEY` werken de echte betaal- en
+contactroutes niet. In development worden die vervangen door demo-flows.
 
-```bash
-pnpm run build
-```
+## Deployment
 
-### Test
+De site is voorbereid op Netlify:
 
-```bash
-pnpm run test
-```
+- build: `pnpm build`
+- publish: `dist`
+- functions: `server`
+- SPA-fallback en `/api/*`-routing staan in `netlify.toml`
 
-View and interact with your tests via UI.
+Zie [docs/HANDOVER.md](docs/HANDOVER.md) voor de volledige livegang.
 
-```bash
-pnpm run test:ui
-```
+## Status
 
-## License
-
-This project is licensed under the MIT License.
+- Zeven hoofdpagina's, bestelflow, bedanktpagina, juridische pagina's en 404.
+- Demo-checkout in development; Mollie iDEAL in productie.
+- Contactformulier met honeypot, tijdscontrole en optionele Turnstile.
+- Geen reviews geplaatst zolang er geen toestemming en echte quotes zijn.
+- Alle beelden zijn placeholders; zie [docs/ASSETS.md](docs/ASSETS.md).

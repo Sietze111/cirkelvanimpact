@@ -1,0 +1,75 @@
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/inter';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-cream-50 text-ink-900;
+  }
+
+  ::selection {
+    @apply bg-coral-300 text-ink-900;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-coral-700 ring-offset-2 ring-offset-cream-50;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .bg-paper {
+    background-image: radial-gradient(
+        circle at 12% 18%,
+        rgba(228, 87, 46, 0.055),
+        transparent 34%
+      ),
+      radial-gradient(circle at 84% 10%, rgba(23, 80, 79, 0.055), transparent 30%),
+      radial-gradient(circle at 70% 92%, rgba(228, 87, 46, 0.04), transparent 36%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

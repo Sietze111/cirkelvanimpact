@@ -1,30 +1,31 @@
 {
-  "name": "reactjs-vite-tailwindcss-boilerplate",
-  "description": "This is a boilerplate build with Vite, React 18, TypeScript, Vitest, Testing Library, TailwindCSS 3, Eslint and Prettier.",
-  "version": "0.1.0",
+  "name": "cirkel-van-impact",
+  "description": "Website voor De Cirkel van Impact van Iepe Soet.",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
+  "license": "UNLICENSED",
   "author": {
-    "name": "João Paulo Moraes",
-    "email": "joaopaulomoraes@outlook.com",
-    "url": "https://github.com/joaopaulomoraes"
+    "name": "Iepe Soet"
   },
-  "bugs": {
-    "url": "https://github.com/joaopaulomoraes/reactjs-vite-tailwindcss-boilerplate/issues",
-    "email": "joaopaulomoraes@outlook.com"
-  },
+  "packageManager": "pnpm@9.14.3",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.server.json && vite build",
     "serve": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "lint": "eslint src --max-warnings=0",
-    "typecheck": "tsc --project tsconfig.json --noEmit"
+    "format": "prettier --write .",
+    "typecheck": "tsc --project tsconfig.json --noEmit && tsc --project tsconfig.server.json --noEmit",
+    "content:check": "node scripts/content-check.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/inter": "^5.3.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",

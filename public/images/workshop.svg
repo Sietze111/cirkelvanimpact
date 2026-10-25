@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Werksessie met een team</title>
+  <desc id="desc">Plaatsvervangende illustratie van een werksessie: mensen rond een tafel met een groot vel papier.</desc>
+  <defs>
+    <linearGradient id="room" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#EEF5F3" />
+      <stop offset="1" stop-color="#E8EEE4" />
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#0F3B3B" flood-opacity="0.14" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#room)" />
+  <circle cx="1040" cy="120" r="170" fill="#FDFBF7" opacity="0.55" />
+  <circle cx="120" cy="700" r="130" fill="#E4572E" opacity="0.08" />
+
+  <ellipse cx="600" cy="676" rx="360" ry="66" fill="#0F3B3B" opacity="0.12" />
+  <ellipse cx="600" cy="620" rx="340" ry="120" fill="#FDFBF7" filter="url(#soft)" />
+
+  <g filter="url(#soft)" transform="rotate(-4 600 570)">
+    <rect x="370" y="470" width="460" height="250" rx="10" fill="#FFFFFF" />
+    <text x="404" y="518" font-family="Inter, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" letter-spacing="2.5" fill="#C94524">ÉÉN ECHTE OPGAVE</text>
+    <circle cx="600" cy="610" r="54" fill="#0F3B3B" />
+    <circle cx="600" cy="610" r="8" fill="#E4572E" />
+    <g font-family="Inter, Helvetica, Arial, sans-serif" font-size="12" fill="#3A443F">
+      <text x="600" y="556" text-anchor="middle">Wat zien we?</text>
+      <text x="670" y="650" text-anchor="middle">Wat betekent dat?</text>
+      <text x="530" y="650" text-anchor="middle">Welke keuze?</text>
+    </g>
+    <path d="M600 556v-18M660 636l12 8M540 636l-12 8" stroke="#E4572E" stroke-width="1.5" opacity="0.6" />
+  </g>
+
+  <g>
+    <g transform="translate(356 386)">
+      <circle r="44" fill="#17504F" />
+      <circle cy="-6" r="16" fill="#FDFBF7" opacity="0.9" />
+      <path d="M-24 38c4-20 44-20 48 0z" fill="#FDFBF7" opacity="0.9" />
+    </g>
+    <g transform="translate(844 386)">
+      <circle r="44" fill="#C94524" />
+      <circle cy="-6" r="16" fill="#FDFBF7" opacity="0.9" />
+      <path d="M-24 38c4-20 44-20 48 0z" fill="#FDFBF7" opacity="0.9" />
+    </g>
+    <g transform="translate(258 586)">
+      <circle r="40" fill="#4F6B52" />
+      <circle cy="-6" r="14" fill="#FDFBF7" opacity="0.9" />
+      <path d="M-22 34c4-18 40-18 44 0z" fill="#FDFBF7" opacity="0.9" />
+    </g>
+    <g transform="translate(942 586)">
+      <circle r="40" fill="#3A443F" />
+      <circle cy="-6" r="14" fill="#FDFBF7" opacity="0.9" />
+      <path d="M-22 34c4-18 40-18 44 0z" fill="#FDFBF7" opacity="0.9" />
+    </g>
+  </g>
+
+  <g>
+    <rect x="230" y="692" width="740" height="1" fill="#0F3B3B" opacity="0.16" />
+    <text x="72" y="122" font-family="Inter, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="2" fill="#17504F">WERKSESSIE · PLAATSHOUDER</text>
+  </g>
+</svg>
