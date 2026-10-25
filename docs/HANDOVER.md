@@ -102,9 +102,9 @@ push naar `main`. Zet in GitHub **Settings → Pages → Build and deployment** 
 
 Zolang de bron daar nog op **Deploy from a branch** staat, publiceert GitHub na
 elke push ook de bronbestanden via de oude Jekyll-job. Die kan als laatste
-klaar zijn en de gebouwde site overschrijven. Daarom reageert de workflow ook
-op het afronden van die job en deployt hij daarna nog eens. Zodra de bron op
-**GitHub Actions** staat, vervalt die dubbele run.
+klaar zijn en de gebouwde site overschrijven. Daarom wacht de deploy-stap tot
+die job klaar is en controleert hij daarna of de gebouwde site echt live staat.
+Zodra de bron op **GitHub Actions** staat, kan die wachttijd weg.
 
 - `VITE_BASE_PATH` wordt automatisch `/<repository>/`; lokaal en op Netlify
   blijft het `/`.
