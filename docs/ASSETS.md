@@ -31,6 +31,9 @@ geladen als het boek in beeld komt.
   Op aanraakschermen blijft verticaal scrollen werken.
 - De scene is een apart chunk van ongeveer 236 kB gzip en wordt niet bij de
   eerste pagina-load meegestuurd.
+- `three` staat bewust op 0.182. Vanaf r183 geeft `THREE.Clock` een
+  deprecation-warning, en react-three-fiber 8 gebruikt die klok nog. Bij een
+  upgrade naar fiber 9 (React 19) kan `three` mee omhoog.
 
 ## Vervangen
 
