@@ -4,22 +4,20 @@
 **Client:** Iepe Soet  
 **Brief:** Definitieve bouwinstructie website, version 16 October 2026  
 **Plan date:** 25 October 2026  
+**Revision:** v2 — CMS removed; content is code-managed  
 **Status:** Proposal — decisions in §4 and §21 need confirmation before implementation
 
 ---
 
 ## 1. Executive summary
 
-The brief asks for a **warm, modern, book-first website**, not an explanation of a management model. The homepage must sell the book within five seconds; the method, reviews and personal story support that sale. The site also needs a real order flow (iDEAL), a contact route, a CMS that Iepe can operate himself, and correct Dutch legal/SEO foundations.
+The brief asks for a **warm, modern, book-first website**, not an explanation of a management model. The homepage must sell the book within five seconds; the method, reviews and personal story support that sale. The site also needs a real order flow (iDEAL), a contact route, correct Dutch legal/SEO foundations, and content that can be updated reliably.
 
-The current boilerplate is a **Vite 5 + React 18 + TypeScript + Tailwind 3.4** starter. It has:
+The current boilerplate is a **Vite 5 + React 18 + TypeScript + Tailwind 3.4** starter. It has no router, pages, commerce, forms, email, analytics or SEO setup — only demo components and demo copy. It is a useful base for the visual layer, but most of the functional site still has to be built.
 
-- no router, no pages, no content model;
-- no CMS, commerce, forms or email;
-- no SEO/prerender setup;
-- demo components and demo copy only.
+**A CMS is explicitly out of scope.** All copy, prices, stock status, reviews, photos and downloads live in typed files inside the repository. Updates go through a git commit and an automatic deploy. There is no admin interface, no database, no content API and no CMS subscription.
 
-It is a useful base for the visual layer, but roughly 80% of the functional site still has to be built.
+> **Important consequence:** the brief's requirement that Iepe can edit core content himself without the builder (§9, §11) cannot be met with this approach. Content changes require a developer or someone comfortable editing the repository. This deviation needs written sign-off before build starts. If self-service editing becomes a hard requirement later, that is a separate project.
 
 **Recommended stack**
 
@@ -27,7 +25,8 @@ It is a useful base for the visual layer, but roughly 80% of the functional site
 |---|---|
 | Frontend | Keep Vite + React 18 + TypeScript + Tailwind 3.4 |
 | Routing/rendering | React Router + static pre-rendering (`vite-react-ssg`; validate in a spike) |
-| CMS | Sanity Studio, build-time content sync via webhook |
+| Content | Typed TypeScript modules in `src/content/` |
+| Images | Local files in `public/images/`, optimized to WebP/AVIF |
 | Hosting | Netlify (static site + serverless functions + deploy previews) |
 | Payments | Mollie, iDEAL + card, hosted checkout |
 | Transactional email | Resend (or Postmark), with SPF/DKIM/DMARC on the domain |
@@ -35,9 +34,9 @@ It is a useful base for the visual layer, but roughly 80% of the functional site
 | Forms | Own serverless endpoint + Cloudflare Turnstile + honeypot |
 | Testing | Vitest + Testing Library, Playwright + axe, Lighthouse CI |
 
-**Delivery shape:** one launch phase with all seven pages, the order flow, CMS, legal pages and SEO. Defer the impact scan, blog, newsletter, dashboards and extra downloads to later phases, as the brief itself proposes.
+**Delivery shape:** one launch phase with all seven pages, the order flow, legal pages and SEO. Defer the impact scan, blog, newsletter, dashboards, extra downloads and any editing interface to later phases.
 
-**Indicative effort:** 25–30 developer days plus design/content production, spread over about four working weeks, excluding client review time. Main external dependencies: book cover, portrait/photos, excerpt PDF, approved review quotes, company details (KvK/btw), and final legal texts.
+**Indicative effort:** 20–25 developer days plus design/content production, spread over about three to four working weeks, excluding client review time. Removing the CMS saves roughly 4–6 days. Main external dependencies: book cover, portrait/photos, excerpt PDF, approved review quotes, company details (KvK/btw), and final legal texts.
 
 ---
 
@@ -77,7 +76,6 @@ The verb “sturen” is still allowed in normal prose (e.g. “beter verbinden 
 
 ### 2.3 Functional requirements
 
-- CMS-editable text, price, stock/delivery message, reviews, photos, contact details and downloads.
 - Mobile-first, fast, accessible, SEO-complete.
 - Order flow with iDEAL, confirmation, delivery information, terms and privacy.
 - Contact form plus visible email address.
@@ -85,6 +83,15 @@ The verb “sturen” is still allowed in normal prose (e.g. “beter verbinden 
 - Cookie banner only for non-essential cookies.
 - Secure forms, updates, 2FA, backups and a full handover.
 - No fake reviews, ratings, numbers or unproven claims.
+
+**Requirements deliberately dropped or changed:**
+
+| Brief requirement | New approach |
+|---|---|
+| CMS for Iepe | Typed content files + git + deploy. No admin UI. |
+| CMS-editable price/stock/reviews/photos | Edited in code, reviewed in a deploy preview, then deployed. |
+| Downloads editable by Iepe | PDF/file replaced in the repo; URL referenced from content. |
+| Content updates without the builder | Not possible in v1; needs written sign-off. |
 
 ### 2.4 Acceptance criteria from §11, translated into build work
 
@@ -94,10 +101,10 @@ The verb “sturen” is still allowed in normal prose (e.g. “beter verbinden 
 - Terminology consistent everywhere.
 - No fictitious reviews or claims.
 - Works on mobile, tablet and desktop.
-- Iepe can edit core content without the builder.
 - Order, payment, confirmation and contact form tested.
 - Privacy, terms, delivery/returns and company details live before launch.
 - All accounts and rights transferable and documented.
+- ~~Iepe can edit core content without the builder~~ — **waived by decision; needs sign-off.**
 
 ---
 
@@ -120,7 +127,7 @@ The verb “sturen” is still allowed in normal prose (e.g. “beter verbinden 
 | Public files | Minimal `robots.txt`, demo favicon | Replace |
 | Repo | Not a git repository | Initialise |
 | Lockfiles | Both `package-lock.json` and `pnpm-lock.yaml` | Choose one (pnpm) |
-| CMS/commerce/forms | None | Build/integrate |
+| Commerce/forms/email | None | Build/integrate |
 | Deployment | None configured | Add Netlify config |
 
 ### 3.2 Gaps against the brief
@@ -128,17 +135,17 @@ The verb “sturen” is still allowed in normal prose (e.g. “beter verbinden 
 | Brief requirement | Boilerplate status | Work needed |
 |---|---|---|
 | 7 pages + order + legal | Absent | Routes, layouts, page templates |
-| CMS for Iepe | Absent | Sanity schemas, Studio, webhook, editor guide |
+| Editable content | Absent | Typed content layer + content guide; no admin UI |
 | iDEAL payments | Absent | Mollie integration + serverless functions |
 | Order confirmation email | Absent | Transactional email templates + domain auth |
 | Contact form | Absent | Validated endpoint, spam protection, auto-reply |
-| Reviews | Absent | CMS collection + conditional rendering |
+| Reviews | Absent | Review data file + conditional rendering |
 | Download/excerpt | Absent | PDF asset + tracked download |
 | SEO per page | Absent | Head management, SSG, sitemap, JSON-LD |
 | Analytics | Absent | Plausible + event wrapper |
 | Cookie/privacy | Absent | Legal pages + cookie statement |
 | Accessible components | Demo only | Design system with a11y baked in |
-| Image pipeline | Picsum demo | Placeholder system + Sanity CDN |
+| Image pipeline | Picsum demo | Placeholder system + local optimization |
 | Error/404 states | Absent | 404 page + redirects |
 | Handover docs | Boilerplate README | Full handover pack |
 
@@ -155,7 +162,7 @@ The verb “sturen” is still allowed in normal prose (e.g. “beter verbinden 
 - [ ] Replace the boilerplate README with project, setup, content and handover documentation.
 - [ ] Remove or repurpose `.github/ISSUE_TEMPLATE`; add CI workflow (lint, typecheck, test, build).
 - [ ] Update `.eslintrc`: add `eslint-plugin-jsx-a11y`; configure Tailwind classname allowlist if needed.
-- [ ] Standardise test naming to `*.test.tsx` and update `vitest` include pattern.
+- [ ] Standardise test naming to `*.test.tsx` and update the Vitest include pattern.
 - [ ] Add `.env.example`; never commit real secrets.
 - [ ] Decide the licence: the boilerplate is MIT, but the client site code may be proprietary. Put the decision in the handover document.
 
@@ -163,19 +170,35 @@ The verb “sturen” is still allowed in normal prose (e.g. “beter verbinden 
 
 ## 4. Key decisions
 
-These are the decisions that shape the build. Recommended defaults are given so work can start if no objection is raised.
+Recommended defaults are given so work can start if no objection is raised.
 
-### D1 — CMS: Sanity (recommended)
+### D1 — Content: code-managed, no CMS (confirmed)
 
-**Why:** structured content, good image handling, draft/publish, free/entry tier, portable content, strong TypeScript client, and a studio Iepe can learn with a short guide. Content can be fetched at build time and on demand.
+**How it works:**
 
-**Alternatives:**
+- All copy and data live in `src/content/` as typed TypeScript modules.
+- Product price, VAT, stock status and delivery text live in one shared commerce module.
+- Reviews live in an array with consent metadata.
+- Legal pages live as structured content, not hardcoded JSX.
+- Images and PDFs live in `public/` and are referenced from content.
+- A change is made in a branch, reviewed in a Netlify deploy preview, merged, and deployed automatically.
 
-- **Storyblok** — friendlier visual editing, but paid tiers and more integration work.
-- **Decap CMS** — free and git-based, but requires GitHub access and rebuilds; less robust for a non-technical editor.
-- **Directus** — powerful but heavier to host and maintain.
+**Consequences:**
 
-**Decision needed:** confirm Sanity, or choose Storyblok if visual editing is a hard requirement.
+- No admin UI, no database, no CMS cost.
+- Every content change is a code change and a deploy.
+- Iepe cannot update price, stock or reviews himself.
+- Urgent stock changes require a developer or someone who can edit the repo.
+- The content update process must be documented and owned before launch.
+
+**Mitigations:**
+
+- One-file-per-concern structure so edits are obvious.
+- A `content:check` script that validates links, alt text, banned terminology and required fields.
+- A short `CONTENT-GUIDE.md` with exact file paths and examples.
+- Optional: train Iepe to edit plain text files through the GitHub web UI if he is comfortable; this is still not a CMS and must be tested before promising it.
+
+**Why not a “lightweight admin”?** It is still a CMS (auth, storage, validation, hosting, backups, security) and was explicitly rejected. Do not sneak one in.
 
 ### D2 — Rendering: static pre-render (recommended)
 
@@ -187,7 +210,7 @@ A pure client-side SPA is weak for social previews, Bing and non-JS crawlers. A 
 
 ### D3 — Hosting: Netlify (recommended)
 
-Static hosting, deploy previews, serverless functions, deploy hooks for Sanity publishes, simple DNS. Vercel is an equally valid alternative; Cloudflare Pages is cheapest but functions/forms are less convenient.
+Static hosting, deploy previews, serverless functions, easy DNS. Vercel is an equally valid alternative; Cloudflare Pages is cheapest but functions/forms are less convenient.
 
 ### D4 — Payments: Mollie (recommended)
 
@@ -196,7 +219,7 @@ iDEAL is the Dutch default; Mollie also supports cards, Bancontact and refunds. 
 **Alternatives:**
 
 - **Stripe Checkout** — excellent developer experience and supports iDEAL, but slightly less “Dutch standard” for this audience.
-- **Mollie payment links** — zero backend, but no quantity/address/stock logic. Not sufficient for v1.
+- **Mollie payment links** — zero backend, but no quantity/address logic. Not sufficient for v1.
 - **No payment in v1** — order request by form/invoice. Lower complexity, but does not meet the brief’s order flow.
 
 **Invoice route:** business orders with invoice are **manual** in v1. The site offers a business request form; Iepe invoices from his accounting tool. Do not build automated invoicing.
@@ -223,7 +246,7 @@ Only approved quotes. If none are approved, hide the homepage block and show an 
 
 ### D9 — Excerpt at launch
 
-Use a direct PDF download (no email gate) if the file is supplied. If not, hide the CTA via a CMS toggle rather than link to a missing file. Track the download event.
+Use a direct PDF download (no email gate) if the file is supplied. If not, hide the CTA rather than link to a missing file. Track the download event.
 
 ### D10 — Language and URL style
 
@@ -234,18 +257,17 @@ Dutch only, `lang="nl"`, `nl-NL` number/date formatting. Lowercase Dutch slugs, 
 ## 5. Recommended architecture
 
 ```
-Browser
+Visitor
   │
   ├── Static HTML/CSS/JS (pre-rendered pages)
-  │      └── Sanity CDN images, self-hosted fonts
+  │      ├── local optimized images
+  │      └── self-hosted fonts
   │
-  ├── /api/product        → live price, stock status, order toggle
-  ├── /api/checkout       → validate + create Mollie payment
-  ├── /api/order-status   → payment status for thank-you page
-  ├── /api/webhook/mollie → verify payment, send emails, log order
-  └── /api/contact        → validate, Turnstile, send email
+  ├── /api/checkout        → validate + create Mollie payment
+  ├── /api/order-status    → payment status for thank-you page
+  ├── /api/webhook/mollie  → verify payment, send emails, log order
+  └── /api/contact         → validate, Turnstile, send email
           │
-          ├── Sanity (content; build-time read + live product read)
           ├── Mollie (payments, refunds, payment records)
           ├── Resend (transactional email)
           └── Plausible (cookieless analytics)
@@ -253,40 +275,31 @@ Browser
 
 ### 5.1 Content flow
 
-1. Iepe edits in Sanity Studio.
-2. On publish, a Sanity webhook triggers a Netlify build.
-3. The build fetches all page content and generates static HTML per route.
-4. Price and stock are also exposed through `/api/product` so the order page is always live.
-5. The checkout endpoint re-reads price/stock/order-enabled from Sanity before creating a payment. The client’s posted price is never trusted.
+1. Developer/Iepe edits a file in `src/content/` or replaces an asset in `public/`.
+2. Commit and push (or open a pull request).
+3. Netlify builds: TypeScript check, content validation, static pre-render.
+4. Deploy preview is reviewed if needed.
+5. Merge to `main` → production deploy in about 1–2 minutes.
 
-### 5.2 Why not fetch everything at runtime?
+No runtime content API. Price and stock are compiled into the site and shared with the checkout function. If price or stock changes, the site must be rebuilt and redeployed.
 
-- Static pages are faster, more robust and better for SEO.
-- Publishing latency of roughly 1–2 minutes is acceptable for marketing content.
-- Volatile commerce data is handled at runtime and validated server-side.
-- If Sanity is unavailable during a build, the build fails rather than silently shipping stale or empty content. The repo keeps a typed seed for local development and tests.
-
-### 5.3 Environments
+### 5.2 Environments
 
 | Environment | Purpose | Data |
 |---|---|---|
-| Local | Development | Seed content or Sanity development dataset; Mollie test key |
-| Deploy preview | Client review per PR | Sanity production read-only; no live payments |
-| Production | Live site | Sanity production; Mollie live key |
+| Local | Development | Local content; Mollie test key |
+| Deploy preview | Review per branch/PR | Same content as branch; no live payments |
+| Production | Live site | `main`; Mollie live key |
 
-Use separate Sanity datasets (`development`, `production`) or at minimum separate tokens. Never use live payment keys outside production.
-
-### 5.4 Secrets and accounts
+### 5.3 Secrets and accounts
 
 - `MOLLIE_API_KEY`
-- `SANITY_PROJECT_ID`, `SANITY_DATASET`, `SANITY_READ_TOKEN`
 - `RESEND_API_KEY`
 - `TURNSTILE_SECRET_KEY`, `VITE_TURNSTILE_SITE_KEY`
 - `SITE_URL`
 - `ORDER_NOTIFY_EMAIL`
-- `SANITY_REVALIDATE_SECRET` / Netlify deploy hook URL
 
-All secrets live in the hosting environment, never in the repo. Sanity write access is not needed by the public site in v1.
+All secrets live in the hosting environment, never in the repo. Shared public constants (price, stock, product name) live in `shared/` and are imported by both the frontend and server functions.
 
 ---
 
@@ -444,20 +457,20 @@ The order is fixed by the brief: **Welkom → boek → waarom → voor wie → i
 
 ### 8.1 Section map
 
-| # | Section | Component | Background | Key action | CMS |
+| # | Section | Component | Background | Key action | Source |
 |---|---|---|---|---|---|
-| 1 | Header | `SiteHeader` | Warm white | Bestel het boek | Settings |
-| 2 | Hero | `Hero` | Cream with subtle circle motif | Bestel het boek / Lees eerst iets meer | Homepage |
-| 3 | Dit is het boek | `BookBlock` | Warm white | Bestel één / meerdere | Product + page |
-| 4 | Waarom dit boek? | `WhyBook` | Cream | — | Homepage |
-| 5 | Voor wie? | `ForWhom` | Warm white | Bestel het boek | Homepage |
-| 6 | Wat krijg je? | `WhatYouGet` | Cream | Bekijk het inkijkexemplaar | Homepage + product |
-| 7 | De methode in één strook | `MethodStrip` | Warm white | Zo werkt de methode | Method page |
-| 8 | Reviews | `ReviewsTeaser` | Cream | Lees alle reacties | Reviews collection |
-| 9 | Iets anders nodig? | `TeamCta` | Petrol band (the only one) | Mail Iepe / Stel je vraag | Homepage |
-| 10 | Over Iepe | `AboutIepe` | Warm white | Lees waarom ik dit boek schreef | About page |
-| 11 | Eindblok | `FinalCta` | Cream | Bestel / Stel een vraag | Homepage |
-| 12 | Footer | `SiteFooter` | Ink/petrol | Contact | Settings |
+| 1 | Header | `SiteHeader` | Warm white | Bestel het boek | `content/site.ts` |
+| 2 | Hero | `Hero` | Cream with subtle circle motif | Bestel het boek / Lees eerst iets meer | `content/home.ts` |
+| 3 | Dit is het boek | `BookBlock` | Warm white | Bestel één / meerdere | `content/home.ts` + `shared/commerce.ts` |
+| 4 | Waarom dit boek? | `WhyBook` | Cream | — | `content/home.ts` |
+| 5 | Voor wie? | `ForWhom` | Warm white | Bestel het boek | `content/home.ts` |
+| 6 | Wat krijg je? | `WhatYouGet` | Cream | Bekijk het inkijkexemplaar | `content/home.ts` + `content/product.ts` |
+| 7 | De methode in één strook | `MethodStrip` | Warm white | Zo werkt de methode | `content/method.ts` |
+| 8 | Reviews | `ReviewsTeaser` | Cream | Lees alle reacties | `content/reviews.ts` |
+| 9 | Iets anders nodig? | `TeamCta` | Petrol band (the only one) | Mail Iepe / Stel je vraag | `content/home.ts` |
+| 10 | Over Iepe | `AboutIepe` | Warm white | Lees waarom ik dit boek schreef | `content/about.ts` |
+| 11 | Eindblok | `FinalCta` | Cream | Bestel / Stel een vraag | `content/home.ts` |
+| 12 | Footer | `SiteFooter` | Ink/petrol | Contact | `content/site.ts` |
 
 ### 8.2 Hero — exact behaviour
 
@@ -466,10 +479,10 @@ The order is fixed by the brief: **Welkom → boek → waarom → voor wie → i
 - Sub: `De Cirkel van Impact helpt je zien waar de verbinding wegvalt en wat er nodig is om de boel weer in beweging te krijgen. Niet harder rennen. Wel beter verbinden en sturen.`
 - Product line: `Een praktisch managementboek voor iedereen die onnodig hard moet rennen.`
 - Primary button: `Bestel het boek` → `/bestellen`.
-- Secondary link: `Lees eerst iets meer` → smooth anchor to `#waarom` (or `/het-boek`; choose anchor on desktop and page link if the anchor is too far).
+- Secondary link: `Lees eerst iets meer` → anchor to `#waarom` (or `/het-boek`; choose anchor on desktop and page link if the anchor is too far).
 - Visual: one composition, not four competing images. Suggest a book cover/mock-up with the portrait overlapping at the lower corner, or a single editorial photo of the book with Iepe’s hand. Do **not** show the ring, hourglass, evidence cards and numbers at once.
 - Mobile: image below the copy, portrait optional or cropped; CTA full-width but not sticky on top of the header.
-- **Word budget:** eyebrow 5 + H1 9 + sub 31 + product line 11 = 56 words. The brief says “circa 55”, so this is acceptable, but the product line can be hidden on the smallest screens if the fold becomes crowded. Do not add another paragraph.
+- **Word budget:** eyebrow 5 + H1 9 + sub 32 + product line 10 = 56 words. The brief says “circa 55”, so this is acceptable, but the product line can be hidden on the smallest screens if the fold becomes crowded. Do not add another paragraph.
 
 **Above-the-fold acceptance:** a first-time visitor can answer “what is this?” (a book), “who is it for?” (people who work hard in organisations) and “what can I do?” (order it) without scrolling.
 
@@ -479,7 +492,7 @@ The order is fixed by the brief: **Welkom → boek → waarom → voor wie → i
 - Price line: `€ 30,00 inclusief 9% btw en verzending binnen Nederland.`
 - Business line: `Zakelijk bestellen en factuur mogelijk.`
 - Multi line: `Meerdere exemplaren nodig? Neem contact op voor een passende afspraak.`
-- Stock/delivery line is a CMS field, e.g. “Op voorraad — verzending binnen 2 werkdagen”. Never invent a delivery time.
+- Stock/delivery line comes from `shared/commerce.ts`, e.g. “Op voorraad — verzending binnen 2 werkdagen”. Changing it requires a deploy. Never invent a delivery time.
 - Buttons: `Bestel één boek` → `/bestellen?qty=1`; `Bestel meerdere boeken` → `/bestellen#aantal` (or contact if D6 changes).
 - Show **one** badge at most (e.g. “Nu verkrijgbaar”); no fake urgency.
 
@@ -506,7 +519,7 @@ Use semantic headings and lists rather than a `<table>` on mobile. Avoid horizon
 Seven bullets from §6.6, with a check/ring marker. CTA `Bekijk het inkijkexemplaar`:
 
 - If the PDF exists: opens in a new tab, `download` attribute, tracked event, file size and PDF label shown.
-- If not: hide via CMS toggle; do not ship a dead button.
+- If not: hide the CTA; do not ship a dead button.
 - Include a short note “PDF, [x] MB” for trust.
 
 ### 8.7 De methode in één rustige strook
@@ -522,7 +535,7 @@ Seven bullets from §6.6, with a check/ring marker. CTA `Bekijk het inkijkexempl
 
 - Maximum three quotes on the homepage.
 - Each: quote, name, role/relationship, organisation (only with permission).
-- CMS fields: `showOnHome`, `featured`, `order`, `consentConfirmed`, `consentDate`.
+- Review data fields: `showOnHome`, `featured`, `order`, `consentConfirmed`, `consentDate`.
 - CTA: `Lees alle reacties` → `/reviews`.
 - If no approved reviews: hide the entire section, or show one approved pre-publication quote. No stars, no “4.7/5”, no initials-only fake names.
 - Layout: three equal cards or one large + two small; no carousel.
@@ -562,7 +575,7 @@ Required:
 - What you get (seven items).
 - Table of contents in broad outlines — **needs the final book TOC**; do not invent chapters.
 - Excerpt PDF (conditional).
-- Specifications: format, pages, ISBN, publisher, publication date, language, dimensions, binding. All CMS fields; hide unknown values rather than inventing them.
+- Specifications: format, pages, ISBN, publisher, publication date, language, dimensions, binding. All fields live in `content/product.ts`; hide unknown values rather than inventing them.
 - Primary order CTA and multi-book route.
 - A short FAQ block if real questions exist (delivery, invoice, returns); otherwise skip.
 - Structured data: `Book` + `Product`/`Offer`.
@@ -585,7 +598,7 @@ Compact and visual. Required:
 - Intro explaining that these are readers’ experiences.
 - Approved quotes with name/role/organisation and permission.
 - Optional star rating **only** if a real review source supports it and the rating is genuine and visible; otherwise no stars at all.
-- Simple “Deel je ervaring” route: mailto with prefilled subject, or a small form. Do not publish submissions automatically; approval via CMS.
+- Simple “Deel je ervaring” route: mailto with prefilled subject, or a small form. Do not publish submissions automatically; a new quote is added to `content/reviews.ts` after approval.
 - Empty state: honest text + invitation, no fake content.
 
 ### 9.4 Over Iepe (`/over-iepe`)
@@ -609,7 +622,7 @@ Compact and visual. Required:
 
 ### 9.6 Contact (`/contact`)
 
-- Intro and response expectation (CMS field; e.g. “Meestal binnen twee werkdagen”).
+- Intro and response expectation (e.g. “Meestal binnen twee werkdagen”).
 - Visible `info@cirkelvanimpact.nl` and mailto link.
 - Form fields: naam (required), e-mail (required), vraag/bericht (required), organisatie (optional), telefoon (optional), onderwerp (select: boek, meerdere boeken/factuur, lezing/team, anders), privacy consent (required).
 - Inline validation, clear error messages, success state with `aria-live`.
@@ -623,14 +636,14 @@ Compact and visual. Required:
 - Order summary: cover, title, price, quantity, total.
 - Quantity selector 1–10 (per D6), with “Meer dan 10? Mail Iepe.”
 - Price transparency: incl. 9% VAT and NL shipping; VAT amount shown in a small breakdown.
-- Stock/delivery status from `/api/product`.
+- Stock/delivery status from `shared/commerce.ts`.
 - Form: name, email, street + number, postcode, city, country fixed to Nederland, optional phone, optional company/VAT number for invoice requests.
 - Payment: iDEAL (required), card optional. Button label includes the amount.
 - Terms checkbox with links to terms/privacy.
 - Trust elements: contact email, delivery information, return link. No fake badges.
 - If ordering is disabled or the product is unavailable: clear message and contact route, no dead form.
 - Error handling: validation summary, preserved input, payment cancelled state, retry.
-- `noindex` not needed for the order page; it can be indexed but should not compete with the book page. Set canonical to `/bestellen` and keep meta simple.
+- Set canonical to `/bestellen` and keep meta simple.
 
 ### 9.8 Bedankt (`/bestellen/bedankt`)
 
@@ -647,7 +660,7 @@ Compact and visual. Required:
 - `/levering-en-retour`: delivery times, shipping scope, packaging, return address, 14-day withdrawal, condition, refund timing.
 - `/cookies`: strictly necessary cookies, Mollie checkout, cookieless analytics, no marketing cookies, how to manage settings.
 - All texts are **drafts for legal review**; Iepe supplies company details. No launch with placeholder legal text.
-- Add “Laatst bijgewerkt” dates from CMS.
+- Store legal copy as structured content with a “Laatst bijgewerkt” date.
 
 ---
 
@@ -677,80 +690,88 @@ Compact and visual. Required:
 - Every image has an `alt`; decorative images use `alt=""`.
 - All interactive elements have visible focus and a 44×44px target where practical.
 - No layout shift: images have width/height or aspect ratio; fonts are preloaded.
-- All copy comes from typed content or CMS, not scattered strings in components. Reusable UI labels may live in `src/content/ui.ts`.
+- All copy comes from typed content, not scattered strings in components. Reusable UI labels may live in `src/content/ui.ts`.
 
 ---
 
-## 11. CMS content model (Sanity)
+## 11. Content layer (no CMS)
 
-### Singletons
+### 11.1 Structure
 
-**`siteSettings`**
+```
+src/content/
+├── site.ts            # name, email, domain, LinkedIn, KvK/btw, footer
+├── navigation.ts      # menu, footer links
+├── home.ts            # hero + all homepage sections
+├── product.ts         # title, subtitle, specs, TOC, excerpt, images
+├── method.ts          # six steps + axis, hourglass, loop, evidence
+├── reviews.ts         # approved quotes + consent metadata
+├── about.ts           # Iepe story, portrait, accent
+├── teams.ts           # four options, note
+├── contact.ts         # intro, response time, subjects
+├── legal/
+│   ├── privacy.ts
+│   ├── terms.ts
+│   ├── delivery.ts
+│   └── cookies.ts
+├── seo.ts             # per-route title/description/OG
+└── ui.ts              # reusable labels (button text, form labels)
+```
 
-- Site name, tagline, domain, email, LinkedIn.
-- KvK, btw-id (nullable; hidden when empty).
-- Default SEO (title, description, OG image).
-- Footer note, response-time text.
-- Analytics domain, order notification email (non-secret).
-- Legal links.
+Shared, imported by frontend and server functions:
 
-**`product`**
+```
+shared/
+├── commerce.ts        # price cents, VAT rate, shipping, stock status, max qty
+└── order.ts           # order types and validation schema
+```
 
-- Title, subtitle, author, cover image + alt, mockup image.
-- Price in cents, VAT rate (9), shipping included, shipping scope.
-- Stock status (`in_stock`, `backorder`, `out_of_stock`), delivery text, expected ship date.
-- Order enabled (kill switch), max self-serve quantity.
-- Invoice available + note.
-- ISBN, pages, publisher, publication date, dimensions, binding, language.
-- Excerpt PDF + enabled toggle.
-- Specs array (label/value).
-- SEO fields.
+### 11.2 Types and validation
 
-**`homePage`**
+- Define TypeScript types for every content module (`HomeContent`, `ProductContent`, `Review`, `MethodStep`, `LegalPage`, etc.).
+- Use `satisfies` so content is checked at compile time.
+- A `content:check` script validates:
+  - all internal links resolve;
+  - every image has alt text;
+  - every review has `consentConfirmed: true` before it can be included in the published array;
+  - banned terminology is absent;
+  - required SEO fields exist;
+  - no placeholder brackets (`[invullen]`, `XX`) remain in production content.
+- Content validation runs in CI and blocks the build on failure.
 
-- SEO.
-- Hero: eyebrow, title, subtitle, product line, primary CTA, secondary CTA, image composition.
-- Section visibility toggles.
-- Book block: title, body, bullets, price note.
-- Why: title, paragraphs, two impact rows.
-- For whom: title, four pairs.
-- What you get: title, seven items, excerpt CTA.
-- Method strip: title, intro, seven rows (six steps + axis), closing line, link.
-- Reviews teaser: title, max items.
-- Team CTA: title, body, email.
-- About: title, paragraphs, accent, image, link.
-- Final CTA: title, two buttons.
+### 11.3 Content update workflow
 
-**`bookPage`, `methodPage`, `reviewsPage`, `aboutPage`, `teamsPage`, `contactPage`**
+1. Developer edits the relevant file (or Iepe supplies the exact text).
+2. Run `pnpm content:check` and `pnpm dev` locally where needed.
+3. Open a branch/PR; Netlify creates a deploy preview.
+4. Review copy/layout in the preview.
+5. Merge to `main`; Netlify deploys production.
+6. Verify the live page and, for commerce changes, do a test order.
 
-- Each with SEO + page-specific fields.
-- Method page: hourglass, six steps + axis, impact loop, seven evidence items, three questions.
-- Book page: TOC outline, specs, excerpt.
-- Contact page: intro, response time, privacy note.
-- Teams page: four options + note.
+**Who updates what:**
 
-**`legalPage`** (collection): title, slug, body (Portable Text), last updated, SEO.
+| Content | File | Owner | Frequency |
+|---|---|---|---|
+| Price, stock, delivery text | `shared/commerce.ts` | Developer | As needed |
+| Hero/home copy | `src/content/home.ts` | Developer | Occasional |
+| Reviews | `src/content/reviews.ts` | Developer | Occasional |
+| Photos | `public/images/` + `src/content/*` | Developer | Occasional |
+| Excerpt PDF | `public/downloads/` + `src/content/product.ts` | Developer | Occasional |
+| Legal texts | `src/content/legal/` | Iepe/legal + developer | Rare |
+| Contact details | `src/content/site.ts` | Developer | Rare |
 
-### Collections
+### 11.4 Editorial guardrails
 
-**`review`**
+- Approved copy from the brief is copied verbatim; suggestions are logged separately.
+- Dutch typographic quotes and dashes are consistent.
+- Price uses `€ 30,00` with a non-breaking space and Dutch formatting.
+- No fake reviews, ratings, client names, numbers or urgency.
+- The method diagrams and step descriptions must match the book.
+- The content guide explains the file layout, how to change text, and how to request a deploy.
 
-- Quote, name, role, organisation, relationship, date.
-- `consentConfirmed` (boolean, required for publishing), `consentDate`, `consentNote`.
-- `showOnHome`, `featured`, `order`.
-- Optional source URL.
-- Validation: cannot publish without consent and a name.
+### 11.5 Optional GitHub web editing
 
-**`faqItem`** (optional): question, answer, order, show on book page.
-
-### Editorial rules in the Studio
-
-- Required alt text on every image.
-- Required SEO title/description with character guidance.
-- Draft/publish workflow.
-- A “Preview” link to the deploy preview.
-- Field descriptions in Dutch, written for Iepe, not developers.
-- A one-page editor guide with screenshots: change price, stock message, review, photo, download, contact details, publish.
+If Iepe is comfortable with it, he can edit plain text through GitHub's web interface and let Netlify deploy. This is **not** a CMS: it requires a GitHub account, care with syntax, and a review step. Do not promise it until it has been tested with him. If he needs a real editing UI later, that is a separate project with its own budget.
 
 ---
 
@@ -759,9 +780,9 @@ Compact and visual. Required:
 ### 12.1 Customer flow
 
 1. CTA → `/bestellen` (quantity prefilled if provided).
-2. Live product fetch: price, stock, order enabled.
+2. Order page reads price, stock and order-enabled from `shared/commerce.ts`.
 3. Customer enters details and accepts terms.
-4. `POST /api/checkout` validates input and re-reads product data.
+4. `POST /api/checkout` validates input and re-reads the shared commerce constants.
 5. Server creates a Mollie payment with amount, description, redirect URL, webhook URL and metadata (order reference, quantity).
 6. Customer pays on Mollie (iDEAL/card).
 7. Redirect to `/bestellen/bedankt?payment_id=...`.
@@ -769,12 +790,12 @@ Compact and visual. Required:
 9. Webhook verifies the payment with Mollie, marks it processed idempotently, sends:
    - customer confirmation (product, quantity, total, address, delivery expectation, contact email, terms/returns links);
    - internal notification to `info@` for fulfilment.
-10. Iepe ships and updates stock status in the CMS.
+10. Iepe ships; stock status is updated in code and deployed when needed.
 
 ### 12.2 Server rules
 
 - Never trust client-supplied price or total.
-- Amount = live CMS price × quantity; validate quantity 1–10.
+- Amount = `PRICE_CENTS` × quantity; validate quantity 1–10.
 - Reject if ordering is disabled, stock is `out_of_stock`, or required data is missing.
 - Use cents everywhere; format only at the edges.
 - Idempotency key = Mollie payment ID; webhook can be retried safely.
@@ -793,13 +814,13 @@ Compact and visual. Required:
 ### 12.4 Stock and delivery
 
 - Use a status, not an exact count, in public copy: “Op voorraad”, “Nabestelling”, “Uitverkocht”.
-- Delivery text is CMS-editable; never hard-code a promise.
+- Delivery text is a shared constant; changing it requires a deploy.
 - If stock is inaccurate, the fallback is an honest message and a contact route, not overselling.
-- Optional phase 2: decrement stock from webhook or connect a fulfilment tool. Not needed for v1.
+- Optional phase 2: connect a fulfilment tool or a stock API. Not needed for v1.
 
 ### 12.5 Order record
 
-For low volume, Mollie + the internal email are the source of truth. Add an optional private Airtable/Supabase log if Iepe wants a fulfilment list. Do not store order PII in Sanity content documents.
+For low volume, Mollie + the internal email are the source of truth. Add an optional private Airtable/Supabase log if Iepe wants a fulfilment list. Do not store order PII in the repository.
 
 ---
 
@@ -830,11 +851,11 @@ For low volume, Mollie + the internal email are the source of truth. Add an opti
 ### 14.1 SEO
 
 - Pre-rendered HTML per route.
-- Unique title and meta description per page, CMS-editable.
+- Unique title and meta description per page, defined in `src/content/seo.ts`.
 - One `h1`, logical headings, descriptive link text.
 - Canonical URLs on `https://www.cirkelvanimpact.nl`.
 - Open Graph and Twitter cards; 1200×630 PNG per key page.
-- `sitemap.xml` generated at build from routes + CMS `lastmod`; exclude thank-you and 404.
+- `sitemap.xml` generated at build from the route list; use the build date for `lastmod` or a manually maintained date per route. Exclude thank-you and 404.
 - `robots.txt` with sitemap reference.
 - 301: apex → www, http → https; consistent trailing-slash behaviour.
 - Structured data:
@@ -867,7 +888,7 @@ Deduplicate `purchase` with sessionStorage and, ideally, a server-side flag. No 
 ### 14.3 Privacy and cookies
 
 - Data map: orders (name, email, address, phone optional, company optional), contact messages, analytics (aggregate), server logs.
-- Processors: Netlify, Sanity, Mollie, Resend, Plausible, Cloudflare (Turnstile). DPAs where required.
+- Processors: Netlify, Mollie, Resend, Plausible, Cloudflare (Turnstile). DPAs where required.
 - Retention: orders 7 years (fiscal), contact emails as long as needed, logs short.
 - No cookie banner if only cookieless analytics and functional checkout cookies on Mollie’s domain. If GA4, YouTube embeds or marketing pixels are added, add a consent banner and update the statement.
 - Privacy statement in plain Dutch, linked from forms and footer.
@@ -901,7 +922,7 @@ Deduplicate `purchase` with sessionStorage and, ideally, a server-side flag. No 
 
 Implementation notes:
 
-- Sanity image CDN with `auto=format` and width sets; local images via `sharp`/`vite-imagetools` if needed.
+- Optimize local images with `sharp` or `vite-imagetools` into responsive WebP/AVIF sets.
 - Lazy-load below-the-fold images; hero gets `fetchpriority="high"`.
 - Route-level code splitting; no animation library.
 - Defer analytics; no chat widgets.
@@ -916,7 +937,6 @@ Implementation notes:
 │   ├── BUILD-PLAN.md
 │   ├── ASSETS.md
 │   ├── CONTENT-GUIDE.md
-│   ├── EDITOR-GUIDE.md
 │   └── HANDOVER.md
 ├── public/
 │   ├── images/
@@ -932,8 +952,10 @@ Implementation notes:
 │   ├── order-status.ts
 │   ├── mollie-webhook.ts
 │   ├── contact.ts
-│   ├── product.ts
 │   └── lib/
+├── shared/
+│   ├── commerce.ts
+│   └── order.ts
 ├── src/
 │   ├── main.tsx
 │   ├── routes.tsx
@@ -946,14 +968,14 @@ Implementation notes:
 │   │   ├── forms/
 │   │   └── seo/
 │   ├── pages/
-│   ├── content/                 # typed seed + UI labels
-│   ├── lib/                     # cms, commerce, analytics, validation, format
+│   ├── content/
+│   ├── lib/                     # analytics, validation, format
 │   ├── types/
 │   └── assets/fonts/
-├── studio/                      # Sanity Studio (separate package)
-│   ├── schemas/
-│   └── sanity.config.ts
 ├── emails/                      # React Email templates
+├── scripts/
+│   ├── optimize-images.ts
+│   └── content-check.ts
 ├── tests/e2e/
 ├── netlify.toml
 ├── tailwind.config.mjs
@@ -974,11 +996,11 @@ Estimates are indicative for one developer, excluding design and client review t
 - Confirm §4 and §21 decisions.
 - Set up git, branch protection, CI.
 - Register/verify domain and mailbox; start SPF/DKIM/DMARC.
-- Create Sanity project and Netlify site.
+- Create Netlify site and Mollie test account.
 - Collect assets and content; create `ASSETS.md`.
 - Validate `vite-react-ssg` in a spike; fallback plan if it causes friction.
 
-**Exit:** stack decisions locked; environments reachable; content/asset list agreed.
+**Exit:** stack decisions locked; environments reachable; content/asset list agreed; no-CMS deviation signed off.
 
 ### Phase 1 — Design system and shell (3–4 days)
 
@@ -1012,7 +1034,7 @@ Estimates are indicative for one developer, excluding design and client review t
 
 ### Phase 4 — Commerce and email (4–5 days)
 
-- Product API, order page, validation, Mollie checkout.
+- Order page, validation, Mollie checkout.
 - Webhook, idempotency, order status page.
 - Email templates + domain authentication.
 - Error/cancel/retry states.
@@ -1021,17 +1043,7 @@ Estimates are indicative for one developer, excluding design and client review t
 
 **Exit:** test payment → webhook → confirmation email → status page works; failure paths handled.
 
-### Phase 5 — CMS and content migration (3–4 days)
-
-- Sanity schemas, Studio deployment, preview.
-- Seed-to-CMS migration of all copy.
-- Image fields, alt validation, SEO fields.
-- Webhook → Netlify build.
-- Editor guide and test edit by Iepe.
-
-**Exit:** Iepe changes price, stock message, review and photo; rebuild publishes correctly.
-
-### Phase 6 — SEO, legal, analytics, QA (3–4 days)
+### Phase 5 — SEO, legal, analytics, QA (3–4 days)
 
 - Per-page meta, sitemap, robots, JSON-LD.
 - OG image previews.
@@ -1040,10 +1052,11 @@ Estimates are indicative for one developer, excluding design and client review t
 - Lighthouse, axe, Playwright, cross-browser.
 - Email deliverability and spam tests.
 - Content/terminology QA.
+- Content update workflow tested.
 
 **Exit:** acceptance matrix (§19) green; only launch blockers remain.
 
-### Phase 7 — Launch and handover (1–2 days)
+### Phase 6 — Launch and handover (1–2 days)
 
 - DNS cutover, SSL, canonical redirects.
 - Live smoke test (order, contact, mail, analytics).
@@ -1074,7 +1087,8 @@ Estimates are indicative for one developer, excluding design and client review t
 - [ ] Legal entity details for privacy/terms.
 - [ ] Final legal texts or approval of drafts after legal review.
 - [ ] Domain registrar and mailbox access/ownership confirmation.
-- [ ] Decision on analytics, payment provider and CMS.
+- [ ] Decision on analytics and payment provider.
+- [ ] **Written sign-off that content is code-managed and Iepe will not have a self-service editing interface.**
 
 ### Placeholders to create now
 
@@ -1087,7 +1101,7 @@ Estimates are indicative for one developer, excluding design and client review t
 
 ### Copy deck
 
-- [ ] Extract all approved copy from the brief into `src/content/seed/` with stable keys.
+- [ ] Extract all approved copy from the brief into `src/content/` with stable keys.
 - [ ] Mark every string with its source section (e.g. `home.hero.title` → §6.2).
 - [ ] Do not paraphrase approved copy; log suggestions separately for Iepe.
 - [ ] Keep Dutch typographic quotes and dashes consistent.
@@ -1097,7 +1111,7 @@ Estimates are indicative for one developer, excluding design and client review t
 
 ## 18. Terminology and copy QA
 
-Add an automated content check (Vitest) that scans the seed and CMS export for banned phrases:
+Add an automated check (`scripts/content-check.ts`) that scans content files for banned phrases:
 
 - `reflecteren` as a sixth step
 - `stuurbeeld`
@@ -1114,6 +1128,7 @@ Also check:
 - Every CTA has a destination that exists.
 - No unsupported claims, numbers or client names.
 - One `h1` per page.
+- No fake reviews (consent flag required).
 
 ---
 
@@ -1128,7 +1143,7 @@ Also check:
 | 5 | Terminology matches the final book | Automated lint + manual read | ☐ |
 | 6 | No fake reviews, ratings or claims | Content audit | ☐ |
 | 7 | Responsive at 360/390/768/1024/1440 | Playwright screenshots + manual | ☐ |
-| 8 | Iepe can edit core content | Observed CMS task | ☐ |
+| 8 | Content update workflow documented and tested | Change a price/review in a branch, deploy preview, verify | ☐ |
 | 9 | Order, payment, confirmation tested | E2E in test mode + live smoke test | ☐ |
 | 10 | Contact form delivered + auto-reply | Live test | ☐ |
 | 11 | Legal pages complete | Checklist + legal review | ☐ |
@@ -1148,19 +1163,20 @@ Also check:
 
 | Risk | Impact | Mitigation |
 |---|---|---|
+| No CMS means Iepe cannot self-edit | Brief requirement unmet; frustration | Written sign-off, documented update process, optional paid update support |
+| Content changes blocked on developer | Slow price/stock/review updates | Single-file structure, fast deploy, clear SLA, train a backup editor |
 | Assets/content arrive late | Launch delay | Placeholders, parallel tracks, launch gate only for cover/portrait/legal |
 | Payment/legal complexity underestimated | Delay, compliance risk | Mollie hosted checkout, manual invoices, legal review, test mode early |
 | No approved reviews at launch | Empty trust section | Conditional rendering, honest empty state, pre-publication quote |
 | SPA SEO weakness | Poor indexing/social cards | Pre-render routes, verify with crawler tests |
-| CMS publish latency | Iepe thinks edits failed | Live product endpoint, visible “published” confirmation, editor guide |
+| Price/stock change requires deploy | Brief mismatch on urgency | Accept 1–2 minute deploy; document it; never charge a stale client price |
 | Terminology drift | Brand inconsistency | Single copy source, automated banned-phrase check, sign-off |
 | Stock inaccuracy | Overselling | Status not counts, manual update, order alerts, contact fallback |
-| Scope creep (scan, blog, newsletter) | Missed launch | Phase gate per §12, change request |
+| Scope creep (scan, blog, newsletter, admin) | Missed launch | Phase gate per §12, change request |
 | Domain/email owned by builder | Client lock-in | Registrar on client name, transfer document, 2FA |
-| PII in email/CMS | GDPR risk | DPA, minimal data, retention, access control, no PII in Sanity content |
+| PII in email/repo | GDPR risk | DPA, minimal data, retention, access control, no order PII in git |
 | Photo quality/cliché | Wrong brand feel | Shot list, art direction, no stock meetings |
 | Diagram inaccuracy | Credibility damage | Use book figures; no invented geometry; Iepe approval |
-| Price change mismatch | Wrong charge | Server re-reads CMS price; fail closed if unavailable |
 | Form spam | Noise, lost mail | Turnstile + honeypot + rate limit + monitoring |
 | Browser/email rendering | Broken experience | Test matrix, progressive enhancement |
 
@@ -1170,7 +1186,7 @@ Also check:
 
 ### Decisions needed
 
-1. **CMS:** Sanity (recommended) or Storyblok?
+1. **Content model:** confirm no CMS and code-managed content (recommended per this revision), including written sign-off that Iepe will not self-edit.
 2. **Hosting:** Netlify (recommended) or Vercel?
 3. **Payments:** Mollie (recommended) or Stripe? Confirm manual invoice handling.
 4. **Analytics:** Plausible (recommended, no banner) or GA4 (needs consent)?
@@ -1182,16 +1198,18 @@ Also check:
 10. **Legal/company details:** who supplies KvK, btw-id, address and final legal texts?
 11. **Photos:** when is the shoot, and can we use a temporary concept cover?
 12. **Domain/email:** which registrar/mailbox provider, and is ownership already with Iepe?
+13. **Seven evidence pieces:** do these map to the six steps plus Beslissen, or to a separate list of seven? The brief says both “per step a proof document” and “seven evidence pieces”; confirm before writing the method page.
+14. **Content update support:** who updates price/stock/reviews after launch, and within what response time? Is a small maintenance arrangement needed?
 
 ### Recommended immediate sequence
 
-1. Confirm D1–D6 and the launch-blocker list.
+1. Confirm D1–D6, the no-CMS deviation, and the launch-blocker list.
 2. Run the `vite-react-ssg` spike and lock the rendering approach.
-3. Set up git/CI, Sanity, Netlify, Mollie test mode and the domain/mailbox.
+3. Set up git/CI, Netlify, Mollie test mode and the domain/mailbox.
 4. Build the design system and homepage first; review with Iepe before the content pages.
 5. Build commerce early enough to test it in parallel with content migration.
 6. Do not schedule launch until cover, portrait, legal pages and company details are real.
 
 ### Definition of done
 
-The site is done when a first-time visitor immediately understands that this is a book by Iepe about getting stuck work moving again, can order it in under two minutes with iDEAL, receives a correct confirmation, can find the method and the person behind it without wading through a model, and Iepe can change the price, stock message, reviews and photos himself — with all accounts, rights and documentation in his name.
+The site is done when a first-time visitor immediately understands that this is a book by Iepe about getting stuck work moving again, can order it in under two minutes with iDEAL, receives a correct confirmation, can find the method and the person behind it without wading through a model, and the site can be updated reliably through a documented, tested code-and-deploy process — with all accounts, rights and documentation in Iepe's name.
